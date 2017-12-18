@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
     public int score = 0;
     public Text scoreText, livesText;
     public int lives = 3;
+    public static bool tutorialEnded = false;
 
     private void Awake()
     {
@@ -21,9 +22,14 @@ public class GameManager : MonoBehaviour {
         scoreText = GameObject.Find("Score").GetComponent<Text>();
         livesText = GameObject.Find("Lives").GetComponent<Text>();
     }
-    public void OnLevelFinishedLoading()
+       
+    public bool IsTutorialDone()
     {
-
+        return tutorialEnded;
+    }
+    public void TutorialDone()
+    {
+        tutorialEnded = true;
     }
 
     void OnEnable()
@@ -74,5 +80,6 @@ public class GameManager : MonoBehaviour {
             SceneManager.LoadScene("LoseScreen");
         }
         if (Input.GetKey(KeyCode.Escape)) Application.Quit();
+        Debug.Log(tutorialEnded);
     }
 }

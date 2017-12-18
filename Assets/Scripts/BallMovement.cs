@@ -17,11 +17,18 @@ public class BallMovement : MonoBehaviour {
     GameManager gameManager;
     //Zmienna sprawdzająca czy piłka już wystartowała
     private bool ballStarted = false;
+    private AudioSource ballSound;
+    public Canvas tutorial;
 
     void Start ()
     {
         rb = GetComponent<Rigidbody>();
+        ballSound = GetComponentInChildren<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
+        if (!gameManager.IsTutorialDone())
+        {
+            tutorial.gameObject.SetActive(true);
+        }
     }
 
     //Funkcja rozpoczynająca ruch piłki. Na początku losuje kierunek w którym piłka ma zacząć się poruszac po czym nadaje jej prędkość.
@@ -35,6 +42,8 @@ public class BallMovement : MonoBehaviour {
         else if (tempY == 1) tempY = -1;
         rb.velocity = new Vector3(tempX * ballStartSpeed, tempY * ballStartSpeed, 0f);
         actuallSpeed = Math.Abs(tempX * ballStartSpeed);
+        tutorial.gameObject.SetActive(false);
+        gameManager.TutorialDone();
     }
 
 	void Update ()
@@ -51,12 +60,12 @@ public class BallMovement : MonoBehaviour {
     //Funkcja po odbiciu piłki dodaje jej 1/100 prędkości początkowej, po czym sprawdza czy odbiła się od gracza i jeśli tak, dodaje mu punkt.
     private void OnCollisionExit(Collision collision)
     {
-        actuallSpeed+= ballStartSpeed/100;
+        actuallSpeed+= ballStartSpeed/100.0f;
         if (collision.gameObject.tag == "Player")
         {
             gameManager.AddPoint();
         }
-        GetComponentInChildren<AudioSource>().Play();
+        ballSound.Play();
     }
 
 }

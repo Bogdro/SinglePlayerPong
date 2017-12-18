@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private Rigidbody playerRb;
     //Początkowa prędkość gracza
-    public int playerSpeed = 12;
+    public int playerSpeed;
     //Zmienne określające czy gracz może się poruszać w górę/w dół;
     public bool canMoveTop = true, canMoveBot = true;
 
@@ -18,12 +18,15 @@ public class PlayerMovement : MonoBehaviour {
 	
 	void Update ()
     {
+        Debug.Log(Input.GetAxis("Vertical") * playerSpeed);
           if (Input.GetAxis("Vertical") > 0)
         {
             if (canMoveTop) playerRb.velocity = new Vector3(0f, Input.GetAxis("Vertical") * playerSpeed, 0f);
+
         }
-        else
+        if (Input.GetAxis("Vertical") < 0)
         {
+
             if (canMoveBot) playerRb.velocity = new Vector3(0f, Input.GetAxis("Vertical") * playerSpeed, 0f);
         }
     }
